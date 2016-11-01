@@ -45,13 +45,16 @@ def clear_repo():
                 pass
     if os.path.isdir(repo_dir):
         shutil.rmtree(repo_dir)
+        logger.info('removed repo')
 
 
 def get_repo():
     if os.path.isdir(os.path.join(repo_dir, '.git')):
         local_repo = git.Repo(repo_dir)
+        logger.info('repo exists')
     else:
         local_repo = git.Repo.clone_from(repo_url, repo_dir)
+        logger.info('repo cloned')
     return local_repo
     # local_repo = remote_repo.clone(repo_dir)
 
@@ -82,8 +85,8 @@ def run_python():
     import create_html
     import instagram
     import strava
-    #strava.reset_strava_json()
-    #strava.get_json('102393')
+    strava.reset_strava_json()
+    strava.get_json('102393')
     logger.info('strava complete')
     for item in tags:
         tagged_url = insta_url + item
