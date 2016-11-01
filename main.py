@@ -14,28 +14,37 @@ repo_ssh = 'git@github.com:jim-ftw/lovestar.git'
 rsa_key_loc = os.getenv('rsa_key_loc', 'C:\Users\jjudd\.ssh\gittle')
 git_ssh_cmd = 'ssh -i ' + rsa_key_loc
 
+
+insta_url = 'https://www.instagram.com/explore/tags/'
+
+tags = [
+    'lovestarbicyclebags',
+    'lovestarraceclub',
+    'lovestarfactoryteam'
+]
+
 logger = logging.getLogger()
 handler = logging.StreamHandler(sys.stdout)
 formatter = logging.Formatter('%(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
 
 def clear_repo():
-    print repo_dir
-    for the_file in os.listdir(repo_dir):
-        file_path = os.path.join(repo_dir, the_file)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print(e)
-            pass
+    if os.path.isdir(repo_dir):
+        for the_file in os.listdir(repo_dir):
+            file_path = os.path.join(repo_dir, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(e)
+                pass
     if os.path.isdir(repo_dir):
         shutil.rmtree(repo_dir)
 
@@ -75,11 +84,20 @@ def run_python():
     import create_html
     import instagram
     import strava
-    # strava.reset_strava_json()
-    # strava.get_json('102393')
-    # logger.info('strava complete')
+    #strava.reset_strava_json()
+    #strava.get_json('102393')
+    logger.info('strava complete')
+    for item in tags:
+        tagged_url = insta_url + item
+        while tagged_url:
+            tagged_url = instagram.get_json(tagged_url, item)
+            time.sleep(random.randint(1, 10))
+    instagram.get_photo_info()
+    instagram.create_thumbnail()
+    create_html.reset_dir()
+    create_html.iterate_json()
 
-clear_repo()
+# clear_repo()
 local_repo = get_repo()
 run_python()
 make_commits(local_repo)
