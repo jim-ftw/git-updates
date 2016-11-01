@@ -11,7 +11,6 @@ import shutil
 repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lovestar'))
 repo_url = 'https://github.com/jim-ftw/lovestar.git'
 repo_ssh = 'git@github.com:jim-ftw/lovestar.git'
-rsa_key_loc = os.getenv('rsa_key_loc', 'C:\Users\jjudd\.ssh\gittle')
 git_ssh_cmd = 'ssh -i ' + rsa_key_loc
 
 
