@@ -60,6 +60,11 @@ def get_repo():
 
 
 def make_commits(repo):
+    email = os.getenv('email_address')
+    name = os.getenv('my_name')
+    with repo.remotes.origin.config_writer as cw:
+        cw.set('user.email', email)
+        cw.set('user.name', name)
     today = datetime.date.today()
     message = "instagram and strava updates from " + str(today)
     print repo.git.status()
