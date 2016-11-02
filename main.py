@@ -125,7 +125,7 @@ def run_python():
 # clear_repo()
 local_repo = get_repo()
 run_python()
-test_file_create()
+#test_file_create()
 make_commits(local_repo)
 push_repo(local_repo)
 time.sleep(30)
