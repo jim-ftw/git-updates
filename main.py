@@ -89,6 +89,10 @@ def make_commits(repo):
         print repo.git.commit(m=message)
     except Exception as e:
         print e
+        clear_repo()
+        time.sleep(30)
+        clear_repo()
+        sys.exit('Nothing to commit')
 
 
 def push_repo(repo):
@@ -120,7 +124,7 @@ def run_python():
 
 # clear_repo()
 local_repo = get_repo()
-run_python()
+#run_python()
 #test_file_create()
 make_commits(local_repo)
 push_repo(local_repo)
