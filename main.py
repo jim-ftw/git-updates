@@ -26,7 +26,7 @@ handler = logging.StreamHandler(sys.stdout)
 formatter = logging.Formatter('%(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
@@ -67,12 +67,18 @@ def get_repo():
     return local_repo
     # local_repo = remote_repo.clone(repo_dir)
 
+def print_config():
+    git_config = os.path.join(repo_dir, '.git', 'config')
+    with open(git_config, 'r') as f:
+        print f.read()
 
 def make_commits(repo):
+    print_config()
     email = os.getenv('email_address')
     name = os.getenv('my_name')
     repo.remotes.origin.config_writer.set('user.email', email)
     repo.remotes.origin.config_writer.set('user.name', name)
+    print_config()
     today = datetime.date.today()
     message = "instagram and strava updates from " + str(today)
     print repo.git.status()
