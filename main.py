@@ -48,6 +48,15 @@ def clear_repo():
         logger.info('removed repo')
 
 
+def test_file_create():
+    test_file = os.path.join(repo_dir, 'test_file')
+    if os.path.isfile(test_file):
+        os.unlink(test_file)
+    else:
+        with open(test_file, 'w') as f:
+            f.write('test')
+    
+
 def get_repo():
     if os.path.isdir(os.path.join(repo_dir, '.git')):
         local_repo = git.Repo(repo_dir)
@@ -105,7 +114,8 @@ def run_python():
 
 # clear_repo()
 local_repo = get_repo()
-run_python()
+#run_python()
+test_file_create()
 make_commits(local_repo)
 push_repo(local_repo)
 time.sleep(30)
