@@ -8,6 +8,7 @@ import datetime
 import shutil
 import requests
 from sparkpost import SparkPost
+from logging.handlers import RotatingFileHandler
 
 
 repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lovestar'))
@@ -28,6 +29,9 @@ handler = logging.StreamHandler(open(log_file, 'w'))
 formatter = logging.Formatter('%(asctime)-26s %(funcName)-16s %(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setFormatter(formatter)
+logger.addHandler(stdout_handler)
 logger.setLevel(logging.INFO)
 logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
@@ -142,8 +146,8 @@ def run_python():
     create_html.iterate_json()
 
 res = requests.get("https://nosnch.in/87c0ca5bfc")
-logger.info('snitch status ' + res.status)
-logger.info('snitch text' + res.text)
+logger.info('snitch status ' + str(res.status_code))
+logger.info('snitch text ' + str(res.text))
 open(log_file, 'w')
 
 # clear_repo()
