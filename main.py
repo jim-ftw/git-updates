@@ -138,6 +138,7 @@ def run_python():
     for item in tags:
         tagged_url = insta_url + item
         while tagged_url:
+            logging.info('new_url: ' + tagged_url)
             tagged_url = instagram.get_json(tagged_url, item)
             time.sleep(random.randint(1, 10))
     instagram.get_photo_info()
