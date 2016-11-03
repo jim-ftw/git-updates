@@ -6,12 +6,14 @@ import git
 import os
 import datetime
 import shutil
+import requests
+from sparkpost import SparkPost
 
 
 repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lovestar'))
 repo_url = 'https://github.com/jim-ftw/lovestar.git'
 repo_ssh = 'git@github.com:jim-ftw/lovestar.git'
-
+log_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'log_file.txt'))
 
 insta_url = 'https://www.instagram.com/explore/tags/'
 
@@ -22,11 +24,11 @@ tags = [
 ]
 
 logger = logging.getLogger()
-handler = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter('%(levelname)-8s %(message)s')
+handler = logging.StreamHandler(open(log_file, 'w'))
+formatter = logging.Formatter('%(asctime)-26s %(funcName)-16s %(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
@@ -55,7 +57,7 @@ def test_file_create():
     else:
         with open(test_file, 'w') as f:
             f.write('test')
-    
+
 
 def get_repo():
     if os.path.isdir(os.path.join(repo_dir, '.git')):
@@ -67,10 +69,12 @@ def get_repo():
     return local_repo
     # local_repo = remote_repo.clone(repo_dir)
 
+
 def print_config():
     git_config = os.path.join(repo_dir, '.git', 'config')
     with open(git_config, 'r') as f:
         print f.read()
+
 
 def make_commits(repo):
     print_config()
@@ -103,6 +107,21 @@ def push_repo(repo):
         repo.remotes.origin.push()
 
 
+def send_logs(logs):
+    sparky = SparkPost()
+    today = datetime.date.today()
+    from_email = 'logs@' + os.getenv('SPARKPOST_SANDBOX_DOMAIN')
+    with open(logs, 'r') as f:
+        log_text = f.read()
+    response = sparky.transmission.send(
+        recipients=[os.getenv('email_address')],
+        html=log_text,
+        from_email=from_email,
+        subject = 'Lovestar Logs for ' + str(today)
+    )
+
+    print response
+
 def run_python():
     py_path = os.path.join(repo_dir, 'python')
     sys.path.insert(0, py_path)
@@ -122,13 +141,19 @@ def run_python():
     create_html.reset_dir()
     create_html.iterate_json()
 
+res = requests.get("https://nosnch.in/87c0ca5bfc")
+logger.info('snitch status ' + res.status)
+logger.info('snitch text' + res.text)
+open(log_file, 'w')
+
 # clear_repo()
 local_repo = get_repo()
 run_python()
-#test_file_create()
+# test_file_create()
 make_commits(local_repo)
 push_repo(local_repo)
 time.sleep(30)
 clear_repo()
 time.sleep(30)
 clear_repo()
+send_logs(log_file)
