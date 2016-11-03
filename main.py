@@ -119,7 +119,7 @@ def send_logs(logs):
         log_text = f.read()
     response = sparky.transmission.send(
         recipients=[os.getenv('email_address')],
-        html=log_text,
+        text=log_text,
         from_email=from_email,
         subject = 'Lovestar Logs for ' + str(today)
     )
