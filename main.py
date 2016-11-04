@@ -95,6 +95,7 @@ def make_commits(repo):
     print repo.git.status()
     try:
         print repo.git.commit(m=message)
+        logger.info('commit success!')
     except Exception as e:
         print e
         clear_repo()
@@ -109,6 +110,7 @@ def push_repo(repo):
     ssh_cmd = 'ssh -i $HOME/.ssh/id_rsa'
     with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
         repo.remotes.origin.push()
+    logger.info('repo pushed')
 
 
 def send_logs(logs):
@@ -119,11 +121,11 @@ def send_logs(logs):
         log_text = f.read()
     response = sparky.transmission.send(
         recipients=[os.getenv('email_address')],
-        text=log_text,
+        text=str(log_text),
         from_email=from_email,
-        subject = 'Lovestar Logs for ' + str(today)
+        subject='Lovestar Logs for ' + str(today)
     )
-
+    print log_text
     print response
 
 def run_python():
@@ -146,15 +148,14 @@ def run_python():
     create_html.reset_dir()
     create_html.iterate_json()
 
+
+open(log_file, 'w')
 res = requests.get("https://nosnch.in/87c0ca5bfc")
 logger.info('snitch status ' + str(res.status_code))
 logger.info('snitch text ' + str(res.text))
-open(log_file, 'w')
 
-# clear_repo()
 local_repo = get_repo()
 run_python()
-# test_file_create()
 make_commits(local_repo)
 push_repo(local_repo)
 time.sleep(30)
