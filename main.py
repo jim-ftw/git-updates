@@ -8,7 +8,6 @@ import datetime
 import shutil
 import requests
 from sparkpost import SparkPost
-from logging.handlers import RotatingFileHandler
 
 
 repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lovestar'))
@@ -125,8 +124,8 @@ def send_logs(logs):
         from_email=from_email,
         subject='Lovestar Logs for ' + str(today)
     )
-    print log_text
     print response
+
 
 def run_python():
     py_path = os.path.join(repo_dir, 'python')
