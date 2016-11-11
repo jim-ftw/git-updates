@@ -64,6 +64,7 @@ def test_file_create():
 
 
 def get_repo():
+    clear_repo()
     if os.path.isdir(os.path.join(repo_dir, '.git')):
         local_repo = git.Repo(repo_dir)
         logger.info('repo exists')
@@ -167,6 +168,4 @@ local_repo = get_repo()
 run_python()
 make_commits(local_repo)
 push_repo(local_repo)
-time.sleep(30)
-clear_repo()
 send_logs(log_file)
