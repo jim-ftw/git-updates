@@ -94,16 +94,17 @@ def make_commits(repo):
     message = "instagram and strava updates from " + str(today)
     status = repo.git.status()
     logger.info(status)
-    print repo.git.add(all=True)
-    print repo.git.status()
+    status = repo.git.add(all=True)
+    logger.info(status)
+    status = repo.git.status()
+    logger.info(status)
     try:
-        print repo.git.commit(m=message)
+        status = repo.git.commit(m=message)
+        logger.info(status)
         logger.info('commit success!')
     except Exception as e:
-        print e
-        clear_repo()
-        time.sleep(30)
-        clear_repo()
+        logger.info(e)
+        send_logs(log_file)
         sys.exit('Nothing to commit')
 
 
