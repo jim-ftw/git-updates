@@ -64,10 +64,11 @@ def test_file_create():
 
 
 def get_repo():
-    clear_repo()
     if os.path.isdir(os.path.join(repo_dir, '.git')):
         local_repo = git.Repo(repo_dir)
         logger.info('repo exists')
+        local_repo.git.pull()
+        logger.info('pulled newest commit')
     else:
         local_repo = git.Repo.clone_from(repo_url, repo_dir)
         logger.info('repo cloned')
@@ -91,7 +92,8 @@ def make_commits(repo):
     print_config()
     today = datetime.date.today()
     message = "instagram and strava updates from " + str(today)
-    print repo.git.status()
+    status = repo.git.status()
+    logger.info(status)
     print repo.git.add(all=True)
     print repo.git.status()
     try:
