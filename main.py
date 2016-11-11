@@ -162,12 +162,11 @@ res = requests.get("https://nosnch.in/87c0ca5bfc")
 logger.info('snitch status ' + str(res.status_code))
 logger.info('snitch text ' + str(res.text))
 
+
 local_repo = get_repo()
 run_python()
 make_commits(local_repo)
 push_repo(local_repo)
-time.sleep(30)
-clear_repo()
 time.sleep(30)
 clear_repo()
 send_logs(log_file)
