@@ -7,6 +7,7 @@ import os
 import datetime
 import shutil
 import requests
+import json
 from sparkpost import SparkPost
 
 
@@ -136,6 +137,9 @@ def run_python():
     strava.reset_strava_json()
     strava.get_json('102393')
     logger.info('strava complete')
+    ls_json_path = os.path.join(repo_dir, 'lsphotos', 'lsphotos.json')
+    with open(ls_json_path, 'r') as f:
+        original_ls_json = json.load(f)
     for item in tags:
         tagged_url = insta_url + item
         while tagged_url:
@@ -144,8 +148,13 @@ def run_python():
             time.sleep(random.randint(1, 10))
     instagram.get_photo_info()
     instagram.create_thumbnail()
-    create_html.reset_dir()
-    create_html.iterate_json()
+    with open(ls_json_path, 'r') as f:
+        new_ls_json = json.load(f)
+    if original_ls_json == new_ls_json:
+        pass
+    else:
+        create_html.reset_dir()
+        create_html.iterate_json()
 
 
 open(log_file, 'w')
