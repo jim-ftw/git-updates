@@ -195,20 +195,10 @@ def get_json(lsphotos_json, url, tag, lsphotos_folder):
     parse_json(lsphotos_json, top_posts, lsphotos_folder)
     tag_page = insta_json['entry_data']['TagPage'][0]['tag']['media']['nodes']
     parse_json(lsphotos_json, tag_page, lsphotos_folder)
-    downloaded_photos = []
-    with open(lsphotos_json, 'r') as fej:
-        dp = json.loads(fej.read())
-    for item in dp['images']:
-        downloaded_photos.append(item['media_id'])
-    for item, entry in enumerate(tag_page):
-        media_id = entry['id']
-        if media_id in downloaded_photos:
-            return False
-        else:
-            while insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['has_next_page'] is True:
-                cursor = insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['end_cursor']
-                new_url = insta_url + tag + '/?max_id=' + cursor
-                return new_url
+    while insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['has_next_page'] is True:
+        cursor = insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['end_cursor']
+        new_url = insta_url + tag + '/?max_id=' + cursor
+        return new_url
 
 
 def rename_files(lsphotos_json, media_file_folder):
