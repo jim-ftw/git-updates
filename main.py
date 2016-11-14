@@ -9,12 +9,23 @@ import shutil
 import requests
 import json
 from sparkpost import SparkPost
+import create_html
+import instagram
+import strava
 
-
-repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lovestar'))
-repo_url = 'https://github.com/jim-ftw/lovestar.git'
-repo_ssh = 'git@github.com:jim-ftw/lovestar.git'
+# Repo locations
+repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'jim-ftw.github.io'))
+repo_url = 'https://github.com/jim-ftw/jim-ftw.github.io.git'
+repo_ssh = 'git@github.com:jim-ftw/jim-ftw.github.io.git'
 log_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'log_file.txt'))
+
+
+# File locations
+ig_folder = os.path.join(repo_dir, 'instagram')
+media_file_folder = os.path.join(repo_dir, 'lsphotos')
+ls_json = os.path.join(repo_dir, 'lsphotos', 'lsphotos.json')
+strava_dir = os.path.join(repo_dir, 'strava')
+strava_json = os.path.join(strava_dir, 'strava.json')
 
 insta_url = 'https://www.instagram.com/explore/tags/'
 
@@ -37,21 +48,19 @@ logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
 
-def clear_repo():
-    if os.path.isdir(repo_dir):
-        for the_file in os.listdir(repo_dir):
-            file_path = os.path.join(repo_dir, the_file)
+def clear_directory(directory):
+    if os.path.isdir(directory):
+        for the_file in os.listdir(directory):
+            file_path = os.path.join(directory, the_file)
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
             except Exception as e:
-                print(e)
+                logger.info(e)
                 pass
-    if os.path.isdir(repo_dir):
-        shutil.rmtree(repo_dir)
-        logger.info('removed repo')
+    logger.info('removed ' + str(directory))
 
 
 def test_file_create():
@@ -133,32 +142,25 @@ def send_logs(logs):
 
 
 def run_python():
-    py_path = os.path.join(repo_dir, 'python')
-    sys.path.insert(0, py_path)
-    import create_html
-    import instagram
-    import strava
-    strava.reset_strava_json()
-    strava.get_json('102393')
+    strava.reset_strava_json(strava_dir, strava_json)
+    strava.get_json('102393', strava_dir, strava_json)
     logger.info('strava complete')
-    ls_json_path = os.path.join(repo_dir, 'lsphotos', 'lsphotos.json')
-    with open(ls_json_path, 'r') as f:
+    with open(ls_json, 'r') as f:
         original_ls_json = json.load(f)
     for item in tags:
         tagged_url = insta_url + item
         while tagged_url:
             logging.info('new_url: ' + tagged_url)
-            tagged_url = instagram.get_json(tagged_url, item)
+            tagged_url = instagram.get_json(ls_json, tagged_url, item, media_file_folder)
             time.sleep(random.randint(1, 10))
-    instagram.get_photo_info()
-    instagram.create_thumbnail()
-    with open(ls_json_path, 'r') as f:
+    instagram.get_photo_info(ls_json)
+    with open(ls_json, 'r') as f:
         new_ls_json = json.load(f)
     if original_ls_json == new_ls_json:
         pass
     else:
-        create_html.reset_dir()
-        create_html.iterate_json()
+        create_html.reset_instapages(repo_dir)
+        create_html.iterate_json(repo_dir, ls_json)
 
 
 open(log_file, 'w')
