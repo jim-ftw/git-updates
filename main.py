@@ -14,9 +14,9 @@ import instagram
 import strava
 
 # Repo locations
-repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'jim-ftw.github.io'))
-repo_url = 'https://github.com/jim-ftw/jim-ftw.github.io.git'
-repo_ssh = 'git@github.com:jim-ftw/jim-ftw.github.io.git'
+repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lovestarraceclub.github.io'))
+repo_url = 'https://github.com/lovestarraceclub/lovestarraceclub.github.io.git'
+repo_ssh = 'git@github.com:lovestarraceclub/lovestarraceclub.github.io.git'
 log_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'log_file.txt'))
 
 
@@ -150,7 +150,7 @@ def run_python():
     for item in tags:
         tagged_url = insta_url + item
         while tagged_url:
-            logging.info('new_url: ' + tagged_url)
+            logging.debug('new_url: ' + tagged_url)
             tagged_url = instagram.get_json(ls_json, tagged_url, item, media_file_folder)
             time.sleep(random.randint(1, 10))
     instagram.get_photo_info(ls_json)
