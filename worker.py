@@ -163,14 +163,13 @@ def run_python():
         create_html.iterate_json(repo_dir, ls_json)
 
 
-open(log_file, 'w')
-res = requests.get("https://nosnch.in/87c0ca5bfc")
-logger.info('snitch status ' + str(res.status_code))
-logger.info('snitch text ' + str(res.text))
-
-
-local_repo = get_repo()
-run_python()
-make_commits(local_repo)
-push_repo(local_repo)
-send_logs(log_file)
+if __name__ == '__main__':
+    open(log_file, 'w')
+    res = requests.get("https://nosnch.in/87c0ca5bfc")
+    logger.info('snitch status ' + str(res.status_code))
+    logger.info('snitch text ' + str(res.text))
+    local_repo = get_repo()
+    run_python()
+    make_commits(local_repo)
+    push_repo(local_repo)
+    send_logs(log_file)
