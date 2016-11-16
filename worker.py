@@ -157,6 +157,7 @@ def run_python():
     with open(ls_json, 'r') as f:
         new_ls_json = json.load(f)
     if original_ls_json == new_ls_json:
+        logger.info('no new instagram pictures')
         pass
     else:
         create_html.reset_instapages(repo_dir)
