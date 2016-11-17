@@ -43,7 +43,7 @@ logger.addHandler(handler)
 stdout_handler = logging.StreamHandler(sys.stdout)
 stdout_handler.setFormatter(formatter)
 logger.addHandler(stdout_handler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
