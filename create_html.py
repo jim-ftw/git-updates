@@ -81,7 +81,13 @@ ig_index_head = '''<!DOCTYPE html>
     <script type="text/javascript" src="js/jquery.1.11.1.js"></script>
     <script type="text/javascript" src="js/strava.js"></script>
     <script type="text/javascript" src="../js/jquery.fancybox.js"></script>
-
+    <script type="text/javascript">
+    $(function() {
+     var images = ['bg1.jpg', 'bg2.jpg', 'bg3.jpg', 'bg4.jpg', 'bg5.jpg', 'bg6.jpg', 'bg7.jpg', 'bg8.jpg', 'bg9.jpg', 'bg10.jpg', 'bg11.jpg', 'bg12.jpg', 'bg13.jpg', 'bg14.jpg', 'bg15.jpg', 'bg16.jpg'];
+     $('.intro').css({'background': 'url(img/bg/' + images[Math.floor(Math.random() * images.length)] + ') no-repeat center center'});
+     $('.intro').css({'background-size': 'cover'})
+    });
+    </script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -197,8 +203,8 @@ ig_index_head = '''<!DOCTYPE html>
     <div id="instagram">
         <div class="container">
             <div class="section-title text-center center">
-
-
+                <h2>Lovestar Instagram</h2>
+                <hr>
             </div>
 
             <div class="row">
