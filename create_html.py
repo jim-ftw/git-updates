@@ -44,7 +44,7 @@ ig_index_head = '''<!DOCTYPE html>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lovestar Bicycle Bags: Custom handmade cycling gear</title>
+    <title>Lovestar Race Club &amp; Bicycle Bags: Handmade Bicycle Gear &amp; Cyclocross Racing</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -59,7 +59,7 @@ ig_index_head = '''<!DOCTYPE html>
     <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
@@ -69,18 +69,18 @@ ig_index_head = '''<!DOCTYPE html>
     <meta name="theme-color" content="#ffffff">
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../fonts/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
 
     <!-- Stylesheet
     ================================================== -->
-    <link rel="stylesheet" type="text/css" href="../css/jquery.fancybox.css">
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css">
     <link href="http://fonts.googleapis.com/css?family=Lato:400,700,900,300" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,800,600,300" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="../js/jquery.1.11.1.js"></script>
+    <script type="text/javascript" src="js/jquery.1.11.1.js"></script>
+    <script type="text/javascript" src="js/strava.js"></script>
     <script type="text/javascript" src="../js/jquery.fancybox.js"></script>
-    <!--    <script type="text/javascript" src="js/lsphotos_all.min.js"></script> -->
 
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -93,13 +93,33 @@ ig_index_head = '''<!DOCTYPE html>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
+    <!-- Header -->
+    <header id="header">
+        <div class="intro">
+            <div class="container">
+                <div class="row">
+                    <div class="intro-text">
+                        <h1><span class="name">Lovestar Race Club &amp; Bicycle Bags</span></h1>
+                        <p>Handmade Bicycle Gear &amp; Cyclocross Racing</p>
+
+                        <a href="https://www.etsy.com/shop/LovestarBicycleBags" class="btn btn-default btn-lg page-scroll">Shop Now on Etsy</a>
+                        <a href="https://www.facebook.com/Lovestar-Bicycle-Bags-handmade-cycling-gear-555812521105482/" class="btn btn-default btn-lg page-scroll">Learn More on Facebook</a>
+                        <br>
+                        <a href="#team" class="btn btn-default btn-lg page-scroll">Lovestar Race Club</a>
+                        <a href="#instagram" class="btn btn-default btn-lg page-scroll">Lovestar Instagram</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
     <!-- Navigation -->
     <div id="nav">
         <nav class="navbar navbar-custom">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"> <i class="fa fa-bars"></i> </button>
-                    <a class="navbar-brand page-scroll" href="#page-top">Lovestar Instagram</a> </div>
+                    <a class="navbar-brand page-scroll" href="#page-top">Lovestar</a> </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
@@ -109,7 +129,9 @@ ig_index_head = '''<!DOCTYPE html>
                             <a href="#page-top"></a>
                         </li>
                         <!-- <li> <a class="page-scroll" href="#about">About</a> </li> -->
-                        <li> <a class="page-scroll" href="../">Home</a> </li>
+                        <li> <a class="page-scroll" href="#team">Race Club</a> </li>
+                        <li> <a class="page-scroll" href="#contact">Contact</a> </li>
+                        <li> <a class="page-scroll" href="#instagram">Instagram</a> </li>
                         <li> <a class="page-scroll" href="#page-top">Back to top</a> </li>
                     </ul>
                 </div>
@@ -117,6 +139,58 @@ ig_index_head = '''<!DOCTYPE html>
         </nav>
     </div>
 
+    <!-- team Section -->
+    <div id="team" class="text-center">
+        <div class="container">
+            <div class="section-title center">
+                <h2>Lovestar Race Club</h2>
+                <hr>
+            </div>
+            <div class="row row-centered strava-team">
+
+
+            </div>
+
+        </div>
+    </div>
+    <!-- Contact Section -->
+    <div id="contact" class="text-center">
+        <div class="container">
+            <div class="section-title center">
+                <h2>Contact</h2>
+                <hr>
+            </div>
+            <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-3">
+                    <a href="https://www.etsy.com/shop/LovestarBicycleBags">
+                        <i class="fa fa-shopping-basket fa-2x"></i>
+                        <p>Etsy</p>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="https://www.facebook.com/Lovestar-Bicycle-Bags-handmade-cycling-gear-555812521105482/">
+                        <i class="fa fa-facebook fa-2x"></i>
+                        <p>Lovestar Bicycle Bags</p>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="mailto:lovestarbicycles@gmail.com">
+                        <i class="fa fa-envelope fa-2x"></i>
+                        <p>lovestarbicycles<br>@gmail.com</p>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="https://www.instagram.com/elliotlovestarbicycles/">
+                        <i class="fa fa-instagram fa-2x"></i>
+                        <p>elliotlovestarbicycles</p>
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+        </div>
+    </div>
 
     <!-- Instagram Section -->
 
@@ -132,60 +206,66 @@ ig_index_head = '''<!DOCTYPE html>
 '''
 
 ig_index_tail = '''
-                </div>
-            </div>
-        </div>
-    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 
 
 
+                    <div class="scroll">
+                        <center>
+                            <a href="instagram1.html" class="next">Next Page</a>
+                        </center>
+                    </div>
 
-    <div class="scroll">
-        <center>
-            <a href="instagram1.html" class="next">Next Page</a>
-        </center>
-    </div>
-    <script type="text/javascript" src="../js/bootstrap.js"></script>
-    <script type="text/javascript" src="../js/SmoothScroll.js"></script>
-    <script type="text/javascript" src="../js/jqBootstrapValidation.js"></script>
-    <script type="text/javascript" src="../js/jquery.jscroll.js"></script>
-    <script type="text/javascript" src="../js/main.js"></script>
-    <script type="text/javascript">
-        $('.fancybox').fancybox({
-            padding: 0,
-            helpers: {
-                title: {
-                    type: 'outside'
-                },
-                overlay: {
-                    locked: false,
-                    closeClick: true,
-                    css: {
-                        'background': 'rgba(0, 0, 0, 0.7)'
-                    }
-                }
-            }
-        });
-        $('.scroll').jscroll({
-            nextSelector: 'a.next'
-        });
-    </script>
-    <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+                    <script type="text/javascript" src="js/bootstrap.js"></script>
+                    <script type="text/javascript" src="js/SmoothScroll.js"></script>
+                    <script type="text/javascript" src="js/jqBootstrapValidation.js"></script>
+                    <script type="text/javascript" src="../js/jquery.jscroll.js"></script>
+                    <script type="text/javascript" src="js/main.js"></script>
+                    <script type="text/javascript">
+                        $('.fancybox').fancybox({
+                            padding: 0,
+                            helpers: {
+                                title: {
+                                    type: 'outside'
+                                },
+                                overlay: {
+                                    locked: false,
+                                    closeClick: true,
+                                    css: {
+                                        'background': 'rgba(0, 0, 0, 0.7)'
+                                    }
+                                }
+                            }
+                        });
+                        $('.scroll').jscroll({
+                            nextSelector: 'a.next'
+                        });
+                    </script>
+                    <script>
+                        (function(i, s, o, g, r, a, m) {
+                            i['GoogleAnalyticsObject'] = r;
+                            i[r] = i[r] || function() {
+                                (i[r].q = i[r].q || []).push(arguments)
+                            }, i[r].l = 1 * new Date();
+                            a = s.createElement(o),
+                                m = s.getElementsByTagName(o)[0];
+                            a.async = 1;
+                            a.src = g;
+                            m.parentNode.insertBefore(a, m)
+                        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-86530273-1', 'auto');
-  ga('send', 'pageview');
+                        ga('create', 'UA-86530273-1', 'auto');
+                        ga('send', 'pageview');
+                    </script>
 
-</script>
+                </body>
 
-</body>
-
-</html>
+                </html>
 '''
 
 iter_file_head = '''
@@ -197,17 +277,16 @@ iter_file_head = '''
 
 def reset_instapages(ig_directory):
     for the_file in os.listdir(ig_directory):
-        if 'instagram' not in the_file:
-            pass
-        else:
-            file_path = os.path.join(ig_directory, the_file)
+        file_path = os.path.join(ig_directory, the_file)
+        fname, file_extension = os.path.splitext(file_path)
+        if file_extension == '.html':
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
                     # elif os.path.isdir(file_path): shutil.rmtree(file_path)
             except Exception as e:
                 print(e)
-    ig_index_file = os.path.join(ig_directory, 'instagram.html')
+    ig_index_file = os.path.join(ig_directory, 'index.html')
     with open(ig_index_file, 'w') as f:
         f.write(ig_index_head)
     logging.info('Instagram folder reset')
@@ -248,7 +327,7 @@ def create_index_html(ig_directory, lsphotos_json):
     insta_dict = json.loads(f.read())
     insta_dict = sorted(insta_dict['images'], key=itemgetter('date'), reverse=True)
     iter_num = 0
-    ig_index_file = os.path.join(ig_directory, 'instagram.html')
+    ig_index_file = os.path.join(ig_directory, 'index.html')
     with open(ig_index_file, 'w') as f:
         f.write(ig_index_head)
     for item in insta_dict:
@@ -321,7 +400,7 @@ def iterate_json(ig_directory, lsphotos_json):
     iter_num = 1
     page_num = 1
     ig_iter_file = os.path.join(ig_directory, 'instagram' + str(page_num) + '.html')
-    ig_index_file = os.path.join(ig_directory, 'instagram.html')
+    ig_index_file = os.path.join(ig_directory, 'index.html')
     for item in insta_dict:
         ig_iter_file = os.path.join(ig_directory, 'instagram' + str(page_num) + '.html')
         caption = decode_unicode_references(item['caption'])
