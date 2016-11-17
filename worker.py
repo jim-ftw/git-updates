@@ -12,6 +12,7 @@ from sparkpost import SparkPost
 import create_html
 import instagram
 import strava
+import argparse
 
 # Repo locations
 repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lovestarraceclub.github.io'))
@@ -35,6 +36,12 @@ tags = [
     'lovestarfactoryteam'
 ]
 
+# https://docs.python.org/2.7/library/argparse.html
+parser = argparse.ArgumentParser(description='Force create_html')
+parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
+parser.add_argument('--debug', help="debug logging level", action="store_true", default=False)
+args = parser.parse_args()
+
 logger = logging.getLogger()
 handler = logging.StreamHandler(open(log_file, 'w'))
 formatter = logging.Formatter('%(asctime)-26s %(funcName)-16s %(levelname)-8s %(message)s')
@@ -43,7 +50,10 @@ logger.addHandler(handler)
 stdout_handler = logging.StreamHandler(sys.stdout)
 stdout_handler.setFormatter(formatter)
 logger.addHandler(stdout_handler)
-logger.setLevel(logging.INFO)
+if args.debug:
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)
 logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
@@ -91,7 +101,7 @@ def print_config():
         print f.read()
 
 
-def make_commits(repo):
+def make_commits(repo, commit_message):
     print_config()
     email = os.getenv('email_address')
     name = os.getenv('my_name')
@@ -99,8 +109,7 @@ def make_commits(repo):
     config.set_value('user', 'email', email)
     config.set_value('user', 'name', name)
     print_config()
-    today = datetime.date.today()
-    message = "instagram and strava updates from " + str(today)
+    message = commit_message
     status = repo.git.status()
     logger.info(status)
     status = repo.git.add(all=True)
@@ -165,12 +174,24 @@ def run_python():
 
 
 if __name__ == '__main__':
-    open(log_file, 'w')
-    res = requests.get("https://nosnch.in/87c0ca5bfc")
-    logger.info('snitch status ' + str(res.status_code))
-    logger.info('snitch text ' + str(res.text))
-    local_repo = get_repo()
-    run_python()
-    make_commits(local_repo)
-    push_repo(local_repo)
-    send_logs(log_file)
+    if args.force:
+        local_repo = get_repo()
+        create_html.reset_instapages(repo_dir)
+        create_html.iterate_json(repo_dir, ls_json)
+        today = datetime.date.today()
+        cm = "reseting html"
+        make_commits(local_repo, cm)
+        push_repo(local_repo)
+        send_logs(log_file)
+    else:
+        open(log_file, 'w')
+        res = requests.get("https://nosnch.in/87c0ca5bfc")
+        logger.info('snitch status ' + str(res.status_code))
+        logger.info('snitch text ' + str(res.text))
+        local_repo = get_repo()
+        run_python()
+        today = datetime.date.today()
+        cm = "instagram and strava updates from " + str(today)
+        make_commits(local_repo, cm)
+        push_repo(local_repo)
+        send_logs(log_file)
