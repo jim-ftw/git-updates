@@ -42,7 +42,7 @@ tags = [
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
 parser.add_argument('--debug', help="debug logging level", action="store_true", default=False)
-parser.add_argument('--newBG', type=int, help="add new background")
+parser.add_argument('--bg', type=int, help="add new background image", nargs='+')
 args = parser.parse_args()
 
 logger = logging.getLogger()
@@ -186,11 +186,12 @@ if __name__ == '__main__':
         make_commits(local_repo, cm)
         push_repo(local_repo)
         send_logs(log_file)
-    elif args.newBG:
-        img_num = args.newBG
+    elif args.bg:
+        img_num = args.bg
         local_repo = get_repo()
         old_bg_contents = os.listdir(bg_folder)
-        new_background.add_background_img(bg_folder, img_num, ls_json)
+        for i in img_num:
+            new_background.add_background_img(bg_folder, i, ls_json)
         new_bg_contents = os.listdir(bg_folder)
         if sorted(old_bg_contents) == sorted(new_bg_contents):
             logger.info('no new backgrounds')
