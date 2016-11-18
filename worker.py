@@ -43,6 +43,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
 parser.add_argument('--debug', help="debug logging level", action="store_true", default=False)
 parser.add_argument('--bg', type=int, help="add new background image", nargs='+')
+parser.add_argument('--rmbg', type=int, help="remove background images", nargs='+')
 args = parser.parse_args()
 
 logger = logging.getLogger()
@@ -192,6 +193,23 @@ if __name__ == '__main__':
         old_bg_contents = os.listdir(bg_folder)
         for i in img_num:
             new_background.add_background_img(bg_folder, i, ls_json)
+        new_bg_contents = os.listdir(bg_folder)
+        if sorted(old_bg_contents) == sorted(new_bg_contents):
+            logger.info('no new backgrounds')
+            pass
+        else:
+            create_html.reset_instapages(repo_dir)
+            create_html.iterate_json(repo_dir, ls_json)
+            cm = "new background image"
+            make_commits(local_repo, cm)
+            push_repo(local_repo)
+            send_logs(log_file)
+    elif args.rmbg:
+        img_num = args.rmbg
+        local_repo = get_repo()
+        old_bg_contents = os.listdir(bg_folder)
+        for i in img_num:
+            new_background.remove_background_img(bg_folder, i)
         new_bg_contents = os.listdir(bg_folder)
         if sorted(old_bg_contents) == sorted(new_bg_contents):
             logger.info('no new backgrounds')

@@ -25,6 +25,15 @@ def getsizes(uri):
     return size, None
 
 
+def remove_background_img(bg_folder, img_number):
+    file_path = os.path.join(bg_folder, str(img_number) + '.jpg')
+    try:
+        os.remove(file_path)
+        logging.info('removed background ' + str(img_number))
+    except:
+        logging.info(str(img_number) + ' does not exist')
+
+
 def add_background_img(bg_folder, img_number, lsphotos_json):
     with open(lsphotos_json, 'r') as f:
         js = json.loads(f.read())
