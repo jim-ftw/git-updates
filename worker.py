@@ -217,7 +217,7 @@ if __name__ == '__main__':
         else:
             create_html.reset_instapages(repo_dir)
             create_html.iterate_json(repo_dir, ls_json)
-            cm = "new background image"
+            cm = "removing background images"
             make_commits(local_repo, cm)
             push_repo(local_repo)
             send_logs(log_file)
