@@ -12,6 +12,7 @@ from sparkpost import SparkPost
 import create_html
 import instagram
 import strava
+import new_background
 import argparse
 
 # Repo locations
@@ -27,6 +28,7 @@ media_file_folder = os.path.join(repo_dir, 'lsphotos')
 ls_json = os.path.join(repo_dir, 'lsphotos', 'lsphotos.json')
 strava_dir = os.path.join(repo_dir, 'strava')
 strava_json = os.path.join(strava_dir, 'strava.json')
+bg_folder = os.path.join(repo_dir, 'img', 'bg')
 
 insta_url = 'https://www.instagram.com/explore/tags/'
 
@@ -37,9 +39,10 @@ tags = [
 ]
 
 # https://docs.python.org/2.7/library/argparse.html
-parser = argparse.ArgumentParser(description='Force create_html')
+parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
 parser.add_argument('--debug', help="debug logging level", action="store_true", default=False)
+parser.add_argument('--newBG', type=int, help="add new background")
 args = parser.parse_args()
 
 logger = logging.getLogger()
@@ -183,6 +186,12 @@ if __name__ == '__main__':
         make_commits(local_repo, cm)
         push_repo(local_repo)
         send_logs(log_file)
+    elif args.newBG:
+        img_num = args.newBG
+        local_repo = get_repo()
+        new_background.add_background_img(bg_folder, img_num, ls_json)
+        create_html.reset_instapages(repo_dir)
+        create_html.iterate_json(repo_dir, ls_json)
     else:
         open(log_file, 'w')
         res = requests.get("https://nosnch.in/87c0ca5bfc")

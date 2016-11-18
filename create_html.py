@@ -83,7 +83,9 @@ ig_index_head = '''<!DOCTYPE html>
     <script type="text/javascript" src="../js/jquery.fancybox.js"></script>
     <script type="text/javascript">
     $(function() {
-     var images = ['bg1.jpg', 'bg2.jpg', 'bg3.jpg', 'bg4.jpg', 'bg5.jpg', 'bg6.jpg', 'bg7.jpg', 'bg8.jpg', 'bg9.jpg', 'bg10.jpg', 'bg11.jpg', 'bg12.jpg', 'bg13.jpg', 'bg14.jpg', 'bg15.jpg', 'bg16.jpg'];
+     var images = '''
+
+ig_index_head2 = ''';
      $('.intro').css({'background': 'url(img/bg/' + images[Math.floor(Math.random() * images.length)] + ') no-repeat center center'});
      $('.intro').css({'background-size': 'cover'})
     });
@@ -280,6 +282,8 @@ iter_file_head = '''
         <div class="instagram-items ig-items">
 '''
 
+bg_files = []
+
 
 def reset_instapages(ig_directory):
     for the_file in os.listdir(ig_directory):
@@ -293,8 +297,12 @@ def reset_instapages(ig_directory):
             except Exception as e:
                 print(e)
     ig_index_file = os.path.join(ig_directory, 'index.html')
+    bg_folder = os.path.join(ig_directory, 'img', 'bg')
+    for the_file in os.listdir(bg_folder):
+        bg_files.append(the_file)
+    print bg_files
     with open(ig_index_file, 'w') as f:
-        f.write(ig_index_head)
+        f.write(ig_index_head + str(bg_files) + ig_index_head2)
     logging.info('Instagram folder reset')
 
 
