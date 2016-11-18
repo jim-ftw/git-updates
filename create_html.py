@@ -300,6 +300,7 @@ def reset_instapages(ig_directory):
     bg_folder = os.path.join(ig_directory, 'img', 'bg')
     for the_file in os.listdir(bg_folder):
         bg_files.append(the_file)
+    bg_files.sort()
     print bg_files
     with open(ig_index_file, 'w') as f:
         f.write(ig_index_head + str(bg_files) + ig_index_head2)
