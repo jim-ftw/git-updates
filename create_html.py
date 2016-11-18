@@ -352,7 +352,7 @@ def create_index_html(ig_directory, lsphotos_json):
         if iter_num == 20:
             with open(ig_index_file, 'a') as f:
                 f.write(ig_index_tail)
-            logging.info('created instagram index file')
+            logging.debug('created instagram index file')
             break
 
 
@@ -392,7 +392,7 @@ def create_page_html(ig_directory, lsphotos_json):
                     f.write('<a href="instagram' + str(page_num + 1) + '.html" class="next">Next Page</a>')
                     f.write('</center>')
                 page_num += 1
-                logging.info('created page number ' + str(page_num))
+                logging.debug('created page number ' + str(page_num))
 
 
 def pretty_html(ig_directory):
