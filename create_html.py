@@ -433,7 +433,7 @@ def iterate_json(ig_directory, lsphotos_json):
                     f.write('<center>')
                     f.write('<a href="instagram' + str(page_num + 1) + '.html" class="next">Next Page</a>')
                     f.write('</center>')
-                logging.info('page written ' + str(page_num))
+                logging.debug('page written ' + str(page_num))
                 page_num += 1
         iter_num += 1
     with open(ig_index_file, 'a') as f:
