@@ -115,11 +115,11 @@ def make_commits(repo, commit_message):
     print_config()
     message = commit_message
     status = repo.git.status()
-    logger.info(status)
+    logger.debug(status)
     status = repo.git.add(all=True)
     logger.info(status)
     status = repo.git.status()
-    logger.info(status)
+    logger.debug(status)
     try:
         status = repo.git.commit(m=message)
         logger.info(status)
