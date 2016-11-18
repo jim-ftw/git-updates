@@ -47,7 +47,7 @@ args = parser.parse_args()
 
 logger = logging.getLogger()
 handler = logging.StreamHandler(open(log_file, 'w'))
-formatter = logging.Formatter('%(asctime)-26s %(funcName)-16s %(levelname)-8s %(message)s')
+formatter = logging.Formatter('%(asctime)-26s %(funcName)-20s %(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 stdout_handler = logging.StreamHandler(sys.stdout)
@@ -189,9 +189,19 @@ if __name__ == '__main__':
     elif args.newBG:
         img_num = args.newBG
         local_repo = get_repo()
+        old_bg_contents = os.listdir(bg_folder)
         new_background.add_background_img(bg_folder, img_num, ls_json)
-        create_html.reset_instapages(repo_dir)
-        create_html.iterate_json(repo_dir, ls_json)
+        new_bg_contents = os.listdir(bg_folder)
+        if sorted(old_bg_contents) == sorted(new_bg_contents):
+            logger.info('no new backgrounds')
+            pass
+        else:
+            create_html.reset_instapages(repo_dir)
+            create_html.iterate_json(repo_dir, ls_json)
+            cm = "new background image"
+            make_commits(local_repo, cm)
+            push_repo(local_repo)
+            send_logs(log_file)
     else:
         open(log_file, 'w')
         res = requests.get("https://nosnch.in/87c0ca5bfc")
