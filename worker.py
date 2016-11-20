@@ -245,7 +245,7 @@ if __name__ == '__main__':
             create_html.iterate_json(repo_dir, ls_json)
             cm = "removing background images " + str(img_num)
             make_commits(local_repo, cm)
-            # push_repo(local_repo)
+            push_repo(local_repo)
             send_logs(log_file)
     else:
         open(log_file, 'w')
