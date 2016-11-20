@@ -9,6 +9,7 @@ import sys
 from PIL import Image
 import datetime
 from pprint import pprint
+import pickle
 
 
 def get_numbers_from_filename(filename):
@@ -102,6 +103,26 @@ def create_thumbnail(lsphotos_json, media_file_folder):
                 json.dump(lsjson, fp, sort_keys=True)
             logging.info('created thumbnail for ' + item['media_code'])
 
+
+def remove_ig_photo(lsphotos_json, ignore_list, ignore_photo):
+    with open(ignore_list, 'rb') as f:
+        try:
+            ignore = pickle.loads(f.read())
+        except:
+            ignore = []
+    with open(lsphotos_json, 'r') as j:
+        js = json.loads(j.read())
+    img = 'lsphotos/image' + str(ignore_photo).zfill(6) + '.jpg'
+    media_id = ''
+    for item in js['images']:
+        if img in item['media_file_path']:
+            media_id = item['media_id']
+        js['images'][:] = [d for d in js['images'] if d.get('media_file_path') != img]
+    ignore.append(media_id)
+    with open(ignore_list, 'wb') as f:
+        pickle.dump(ignore, f)
+    with open(lsphotos_json, 'wb') as f:
+        f.write(json.dumps(js))
 
 def parse_json(lsphotos_json, tag_page_json, media_file_folder):
     for item, entry in enumerate(tag_page_json):

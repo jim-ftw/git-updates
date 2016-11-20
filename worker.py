@@ -26,6 +26,7 @@ log_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'log_file.txt
 ig_folder = os.path.join(repo_dir, 'instagram')
 media_file_folder = os.path.join(repo_dir, 'lsphotos')
 ls_json = os.path.join(repo_dir, 'lsphotos', 'lsphotos.json')
+ls_ignore = os.path.join(repo_dir, 'lsphotos', 'lsignore.pkl')
 strava_dir = os.path.join(repo_dir, 'strava')
 strava_json = os.path.join(strava_dir, 'strava.json')
 bg_folder = os.path.join(repo_dir, 'img', 'bg')
@@ -42,8 +43,9 @@ tags = [
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
 parser.add_argument('--debug', help="debug logging level", action="store_true", default=False)
-parser.add_argument('--bg', type=int, help="add new background image", nargs='+')
-parser.add_argument('--rmbg', type=int, help="remove background images", nargs='+')
+parser.add_argument('--bg', type=int, help="add new background image based on image number", nargs='+')
+parser.add_argument('--rmbg', type=int, help="remove background images based on image number", nargs='+')
+parser.add_argument('--rmig', type=int, help="remove instagram photos based on image number", nargs='+')
 args = parser.parse_args()
 
 logger = logging.getLogger()
@@ -139,6 +141,11 @@ def push_repo(repo):
     logger.info('repo pushed')
 
 
+def git_stash():
+    local_repo = get_repo()
+    local_repo.git.stash()
+
+
 def send_logs(logs):
     sparky = SparkPost()
     today = datetime.date.today()
@@ -220,6 +227,25 @@ if __name__ == '__main__':
             cm = "removing background images"
             make_commits(local_repo, cm)
             push_repo(local_repo)
+            send_logs(log_file)
+    elif args.rmig:
+        img_num = args.rmig
+        local_repo = get_repo()
+        with open(ls_json, 'r') as f:
+            old_ig_contents = json.loads(f.read())
+        for i in img_num:
+            instagram.remove_ig_photo(ls_json, ls_ignore, i)
+        with open(ls_json, 'r') as f:
+            new_ig_contents = json.loads(f.read())
+        if old_ig_contents == new_ig_contents:
+            logger.info('no instagram photos removed')
+            pass
+        else:
+            create_html.reset_instapages(repo_dir)
+            create_html.iterate_json(repo_dir, ls_json)
+            cm = "removing background images " + str(img_num)
+            make_commits(local_repo, cm)
+            # push_repo(local_repo)
             send_logs(log_file)
     else:
         open(log_file, 'w')
