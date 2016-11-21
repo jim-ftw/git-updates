@@ -26,20 +26,20 @@ log_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'log_file.txt
 ig_folder = os.path.join(repo_dir, 'instagram')
 media_file_folder = os.path.join(repo_dir, 'lsphotos')
 ls_json = os.path.join(repo_dir, 'lsphotos', 'lsphotos.json')
-ls_ignore = os.path.join(repo_dir, 'lsphotos', 'lsignore.pkl')
 strava_dir = os.path.join(repo_dir, 'strava')
 strava_json = os.path.join(strava_dir, 'strava.json')
 bg_folder = os.path.join(repo_dir, 'img', 'bg')
 
+# change these to pull different tags for isntagram
 insta_url = 'https://www.instagram.com/explore/tags/'
 
 tags = [
-    'lovestarbicyclebags',
-    'lovestarraceclub',
-    'lovestarfactoryteam'
+    # 'lovestarbicyclebags',
+    # 'lovestarfactoryteam',
+    'lovestarraceclub'
 ]
 
-# https://docs.python.org/2.7/library/argparse.html
+# python arguments parsing
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
 parser.add_argument('--debug', help="debug logging level", action="store_true", default=False)
@@ -48,6 +48,8 @@ parser.add_argument('--rmbg', type=int, help="remove background images based on 
 parser.add_argument('--rmig', type=int, help="remove instagram photos based on image number", nargs='+')
 args = parser.parse_args()
 
+
+# logging
 logger = logging.getLogger()
 handler = logging.StreamHandler(open(log_file, 'w'))
 formatter = logging.Formatter('%(asctime)-26s %(funcName)-20s %(levelname)-8s %(message)s')
@@ -64,6 +66,7 @@ logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
 
+# nuclear option: this will completely remove an entire directory
 def clear_directory(directory):
     if os.path.isdir(directory):
         for the_file in os.listdir(directory):
@@ -79,6 +82,8 @@ def clear_directory(directory):
     logger.info('removed ' + str(directory))
 
 
+# if you need to test your git pushes, this will check for test_file,
+# and either create it or delete it so you have something to commit
 def test_file_create():
     test_file = os.path.join(repo_dir, 'test_file')
     if os.path.isfile(test_file):
@@ -88,6 +93,7 @@ def test_file_create():
             f.write('test')
 
 
+# pull the repo specified above
 def get_repo():
     if os.path.isdir(os.path.join(repo_dir, '.git')):
         local_repo = git.Repo(repo_dir)
@@ -101,20 +107,20 @@ def get_repo():
     # local_repo = remote_repo.clone(repo_dir)
 
 
+# prints the repository config file
 def print_config():
     git_config = os.path.join(repo_dir, '.git', 'config')
     with open(git_config, 'r') as f:
         print f.read()
 
 
+# make any commits that have been staged
 def make_commits(repo, commit_message):
-    print_config()
     email = os.getenv('email_address')
     name = os.getenv('my_name')
     config = repo.config_writer()
     config.set_value('user', 'email', email)
     config.set_value('user', 'name', name)
-    print_config()
     message = commit_message
     status = repo.git.status()
     logger.debug(status)
@@ -132,9 +138,9 @@ def make_commits(repo, commit_message):
         sys.exit('Nothing to commit')
 
 
+# pushes the repository (using SSH)
 def push_repo(repo):
     repo.remotes.origin.set_url(repo_ssh)
-    print repo.remotes.origin.url
     ssh_cmd = 'ssh -i $HOME/.ssh/id_rsa'
     with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
         repo.remotes.origin.push()
@@ -146,6 +152,7 @@ def git_stash():
     local_repo.git.stash()
 
 
+# send logs via SparkPost
 def send_logs(logs):
     sparky = SparkPost()
     today = datetime.date.today()
@@ -161,6 +168,7 @@ def send_logs(logs):
     print response
 
 
+# Runs the python from Strava, Instagram, and Create HTML
 def run_python():
     strava.reset_strava_json(strava_dir, strava_json)
     strava.get_json('102393', strava_dir, strava_json)
@@ -191,8 +199,8 @@ if __name__ == '__main__':
         create_html.iterate_json(repo_dir, ls_json)
         today = datetime.date.today()
         cm = "reseting html"
-        make_commits(local_repo, cm)
-        push_repo(local_repo)
+        # make_commits(local_repo, cm)
+        # push_repo(local_repo)
         send_logs(log_file)
     elif args.bg:
         img_num = args.bg
@@ -234,7 +242,7 @@ if __name__ == '__main__':
         with open(ls_json, 'r') as f:
             old_ig_contents = json.loads(f.read())
         for i in img_num:
-            instagram.remove_ig_photo(ls_json, ls_ignore, i)
+            instagram.remove_ig_photo(ls_json, i)
         with open(ls_json, 'r') as f:
             new_ig_contents = json.loads(f.read())
         if old_ig_contents == new_ig_contents:
