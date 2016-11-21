@@ -7,6 +7,7 @@ from operator import itemgetter
 import re
 import sys
 from bs4 import BeautifulSoup
+from pprint import pprint
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -341,11 +342,13 @@ def create_index_html(ig_directory, lsphotos_json):
     f = open(lsphotos_json, 'r')
     insta_dict = json.loads(f.read())
     insta_dict = sorted(insta_dict['images'], key=itemgetter('date'), reverse=True)
+    insta_dict[:] = [d for d in insta_dict if d.get('ignore') is not True]
     iter_num = 0
     ig_index_file = os.path.join(ig_directory, 'index.html')
     with open(ig_index_file, 'w') as f:
         f.write(ig_index_head)
     for item in insta_dict:
+        pprint(item)
         caption = decode_unicode_references(item['caption'])
         write_photo_entry(ig_index_file, item['media_file_path'], caption, item['owner']['username'])
         iter_num += 1
@@ -359,8 +362,9 @@ def create_index_html(ig_directory, lsphotos_json):
 def create_page_html(ig_directory, lsphotos_json):
     f = open(lsphotos_json, 'r')
     insta_dict = json.loads(f.read())
-    insta_dict_items = len(insta_dict['images'])
     insta_dict = sorted(insta_dict['images'], key=itemgetter('date'), reverse=True)
+    insta_dict[:] = [d for d in insta_dict if d.get('ignore') is not True]
+    insta_dict_items = len(insta_dict)
     iter_num = 0
     page_num = 1
     ig_iter_file = os.path.join(ig_directory, 'instagram' + str(page_num) + '.html')
@@ -410,6 +414,7 @@ def pretty_html(ig_directory):
 def iterate_json(ig_directory, lsphotos_json):
     f = open(lsphotos_json, 'r')
     insta_dict = json.loads(f.read())
+    insta_dict['images'][:] = [d for d in insta_dict['images'] if d.get('ignore') is not True]
     insta_dict_items = len(insta_dict['images'])
     insta_dict = sorted(insta_dict['images'], key=itemgetter('date'), reverse=True)
     iter_num = 1

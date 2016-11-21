@@ -48,6 +48,7 @@ def convert_to_iso_time(epoch_time):
     return dt.isoformat()
 
 
+# resets directory and creates instagram json
 def reset_dir(lsphotos_json, media_file_folder):
     for the_file in os.listdir(media_file_folder):
         file_path = os.path.join(media_file_folder, the_file)
@@ -64,6 +65,7 @@ def reset_dir(lsphotos_json, media_file_folder):
         json.dump(instagram_dict, f, sort_keys=True)
 
 
+# make images smaller
 def resize_big_images(image_path):
     fname, file_extension = os.path.splitext(image_path)
     img = Image.open(image_path)
@@ -81,48 +83,41 @@ def resize_big_images(image_path):
         logging.info('image resized')
 
 
-def create_thumbnail(lsphotos_json, media_file_folder):
-    f = open(lsphotos_json)
-    lsjson = json.loads(f.read())
-    size = 400, 400
-    for item in lsjson['images']:
-        if 'thumbnail_path' in item:
-            logging.debug('skipping ' + item['media_code'])
-        else:
-            path, big_picture = os.path.split(item['media_file_path'])
-            file_name, file_ext = os.path.splitext(big_picture)
-            thumbnail_name = file_name + '_smaill' + file_ext
-            thumbnail_path = os.path.join(media_file_path, file_name + '_small' + file_ext)
-            media_file = os.path.join(media_file_folder, big_picture)
-            im = Image.open(media_file)
-            im.thumbnail(size)
-            im.save(thumbnail_path)
-            item['thumbnail_path'] = os.path.relpath(
-                thumbnail_path, os.path.join(os.path.dirname(__file__), '..'))
-            with open(lsphotos_json, 'w') as fp:
-                json.dump(lsjson, fp, sort_keys=True)
-            logging.info('created thumbnail for ' + item['media_code'])
+# def create_thumbnail(lsphotos_json, media_file_folder):
+#     f = open(lsphotos_json)
+#     lsjson = json.loads(f.read())
+#     size = 400, 400
+#     for item in lsjson['images']:
+#         if 'thumbnail_path' in item:
+#             logging.debug('skipping ' + item['media_code'])
+#         else:
+#             path, big_picture = os.path.split(item['media_file_path'])
+#             file_name, file_ext = os.path.splitext(big_picture)
+#             thumbnail_name = file_name + '_smaill' + file_ext
+#             thumbnail_path = os.path.join(media_file_folder, file_name + '_small' + file_ext)
+#             media_file = os.path.join(media_file_folder, big_picture)
+#             im = Image.open(media_file)
+#             im.thumbnail(size)
+#             im.save(thumbnail_path)
+#             item['thumbnail_path'] = os.path.relpath(
+#                 thumbnail_path, os.path.join(os.path.dirname(__file__), '..'))
+#             with open(lsphotos_json, 'w') as fp:
+#                 json.dump(lsjson, fp, sort_keys=True)
+#             logging.info('created thumbnail for ' + item['media_code'])
 
 
-def remove_ig_photo(lsphotos_json, ignore_list, ignore_photo):
-    with open(ignore_list, 'rb') as f:
-        try:
-            ignore = pickle.loads(f.read())
-        except:
-            ignore = []
+# remove a specific instagram photo based on photo number
+def remove_ig_photo(lsphotos_json, ignore_photo):
     with open(lsphotos_json, 'r') as j:
         js = json.loads(j.read())
-    img = 'lsphotos/image' + str(ignore_photo).zfill(6) + '.jpg'
-    media_id = ''
+    img = str(ignore_photo).zfill(6) + '.jpg'
     for item in js['images']:
-        if img in item['media_file_path']:
-            media_id = item['media_id']
-        js['images'][:] = [d for d in js['images'] if d.get('media_file_path') != img]
-    ignore.append(media_id)
-    with open(ignore_list, 'wb') as f:
-        pickle.dump(ignore, f)
+        media_file_path = item['media_file_path'][-10:]
+        if img == media_file_path:
+            item['ignore'] = True
     with open(lsphotos_json, 'wb') as f:
         f.write(json.dumps(js))
+
 
 def parse_json(lsphotos_json, tag_page_json, media_file_folder):
     for item, entry in enumerate(tag_page_json):
@@ -154,7 +149,7 @@ def parse_json(lsphotos_json, tag_page_json, media_file_folder):
             with open(media_file_path, 'wb') as handle:
                 response = requests.get(media_url, stream=True)
                 if not response.ok:
-                    print 'couldn\'t download file: ' + media_id
+                    logging.error('couldn\'t download file: ' + media_id)
                 for block in response.iter_content(1024):
                     handle.write(block)
             entry = {}
@@ -166,6 +161,7 @@ def parse_json(lsphotos_json, tag_page_json, media_file_folder):
             entry['caption'] = media_caption
             entry['date'] = media_date
             entry['utc_date'] = media_utc_date
+            entry['ignore'] = False
             entry['media_file_path'] = os.path.join('lsphotos', media_file_name)
             f = open(lsphotos_json, 'r')
             lsphotos_dict = json.loads(f.read())
