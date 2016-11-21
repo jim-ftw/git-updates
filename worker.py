@@ -34,8 +34,8 @@ bg_folder = os.path.join(repo_dir, 'img', 'bg')
 insta_url = 'https://www.instagram.com/explore/tags/'
 
 tags = [
-    # 'lovestarbicyclebags',
-    # 'lovestarfactoryteam',
+    'lovestarbicyclebags',
+    'lovestarfactoryteam',
     'lovestarraceclub'
 ]
 
