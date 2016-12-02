@@ -199,8 +199,8 @@ if __name__ == '__main__':
         create_html.iterate_json(repo_dir, ls_json)
         today = datetime.date.today()
         cm = "reseting html"
-        # make_commits(local_repo, cm)
-        # push_repo(local_repo)
+        make_commits(local_repo, cm)
+        push_repo(local_repo)
         send_logs(log_file)
     elif args.bg:
         img_num = args.bg
