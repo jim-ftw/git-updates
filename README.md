@@ -14,7 +14,7 @@ A stupid set of python scripts that lets me automatically update single page sit
 
 ```python
 python worker.py [-h] [-f] [--debug] [--bg BG [BG ...]]
-                 [--rmbg RMBG [RMBG ...]] [--rmig RMIG [RMIG ...]]
+                 [--rmbg RMBG [RMBG ...]] [--rmig RMIG [RMIG ...]] [--test]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -25,4 +25,5 @@ optional arguments:
                         remove background images based on image number
   --rmig RMIG [RMIG ...]
                         remove instagram photos based on image number
+  --test                run img tests
 ```
