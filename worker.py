@@ -14,6 +14,7 @@ import instagram
 import strava
 import new_background
 import argparse
+import test_site
 
 # Repo locations
 repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lovestarraceclub.github.io'))
@@ -39,6 +40,13 @@ tags = [
     'lovestarraceclub'
 ]
 
+# test items
+page_urls = []
+test_urls = []
+start_url = 'http://lovestarrace.club/'
+bad_urls = []
+
+
 # python arguments parsing
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
@@ -46,6 +54,7 @@ parser.add_argument('--debug', help="debug logging level", action="store_true", 
 parser.add_argument('--bg', type=int, help="add new background image based on image number", nargs='+')
 parser.add_argument('--rmbg', type=int, help="remove background images based on image number", nargs='+')
 parser.add_argument('--rmig', type=int, help="remove instagram photos based on image number", nargs='+')
+parser.add_argument('--test', help="run img tests", action="store_true", default=False)
 args = parser.parse_args()
 
 
@@ -112,6 +121,29 @@ def print_config():
     git_config = os.path.join(repo_dir, '.git', 'config')
     with open(git_config, 'r') as f:
         print f.read()
+
+
+def run_tests():
+    page_urls.append(start_url)
+    s = test_site.get_bs(start_url)
+    u = test_site.get_page_urls(s)
+    global test_urls
+    test_urls += test_site.get_test_urls(s)
+    while u:
+        u = start_url + u
+        page_urls.append(u)
+        s = test_site.get_bs(u)
+        u = test_site.get_page_urls(s)
+        test_urls += test_site.get_test_urls(s)
+    for i in test_urls:
+        t = test_site.check_url_status(i)
+        if t:
+            bad_urls.append(t)
+    if not bad_urls:
+        logger.info('no bad urls')
+    else:
+        for i in bad_urls:
+            logger.warn('bad url: ' + i)
 
 
 # make any commits that have been staged
@@ -201,6 +233,8 @@ if __name__ == '__main__':
         cm = "reseting html"
         make_commits(local_repo, cm)
         push_repo(local_repo)
+        time.sleep(30)
+        run_tests()
         send_logs(log_file)
     elif args.bg:
         img_num = args.bg
@@ -218,6 +252,8 @@ if __name__ == '__main__':
             cm = "new background image"
             make_commits(local_repo, cm)
             push_repo(local_repo)
+            time.sleep(30)
+            run_tests
             send_logs(log_file)
     elif args.rmbg:
         img_num = args.rmbg
@@ -227,7 +263,7 @@ if __name__ == '__main__':
             new_background.remove_background_img(bg_folder, i)
         new_bg_contents = os.listdir(bg_folder)
         if sorted(old_bg_contents) == sorted(new_bg_contents):
-            logger.info('no new backgrounds')
+            logger.info('no backgrounds to remove')
             pass
         else:
             create_html.reset_instapages(repo_dir)
@@ -235,6 +271,8 @@ if __name__ == '__main__':
             cm = "removing background images"
             make_commits(local_repo, cm)
             push_repo(local_repo)
+            time.sleep(30)
+            run_tests()
             send_logs(log_file)
     elif args.rmig:
         img_num = args.rmig
@@ -254,7 +292,13 @@ if __name__ == '__main__':
             cm = "removing instagram images " + str(img_num)
             make_commits(local_repo, cm)
             push_repo(local_repo)
+            time.sleep(30)
+            run_tests()
             send_logs(log_file)
+    elif args.test:
+        open(log_file, 'w')
+        run_tests()
+        send_logs(log_file)
     else:
         open(log_file, 'w')
         res = requests.get("https://nosnch.in/87c0ca5bfc")
@@ -266,4 +310,6 @@ if __name__ == '__main__':
         cm = "instagram and strava updates from " + str(today)
         make_commits(local_repo, cm)
         push_repo(local_repo)
+        time.sleep(30)
+        run_tests()
         send_logs(log_file)
