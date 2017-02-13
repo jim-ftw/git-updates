@@ -216,7 +216,6 @@ def get_json(lsphotos_json, url, tag, lsphotos_folder):
     try:
         while insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['has_next_page'] is True:
             cursor = insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['end_cursor']
-            print cursor
             new_url = insta_url + tag + '/?max_id=' + cursor
             return new_url
     except TypeError:
