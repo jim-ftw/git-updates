@@ -50,11 +50,12 @@ bad_urls = []
 # python arguments parsing
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
-parser.add_argument('--debug', help="debug logging level", action="store_true", default=False)
+parser.add_argument('--verbose', help="verbose logging level", action="store_true", default=False)
 parser.add_argument('--bg', type=int, help="add new background image based on image number", nargs='+')
 parser.add_argument('--rmbg', type=int, help="remove background images based on image number", nargs='+')
 parser.add_argument('--rmig', type=int, help="remove instagram photos based on image number", nargs='+')
 parser.add_argument('--test', help="run img tests", action="store_true", default=False)
+parser.add_argument('--nopush', help="do not push repo", action="store_true", default=False)
 args = parser.parse_args()
 
 
@@ -69,7 +70,7 @@ stdout_handler.setFormatter(formatter)
 logger.addHandler(stdout_handler)
 logging.getLogger("requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
-if args.debug:
+if args.verbose:
     logger.setLevel(logging.DEBUG)
     logging.getLogger("requests").setLevel(logging.DEBUG)
     logging.getLogger("urllib3").setLevel(logging.DEBUG)
@@ -300,15 +301,25 @@ if __name__ == '__main__':
         open(log_file, 'w')
         run_tests()
         send_logs(log_file)
-    else:
+    elif args.nopush:
         open(log_file, 'w')
-        res = requests.get("https://nosnch.in/87c0ca5bfc")
-        logger.info('snitch status ' + str(res.status_code))
-        logger.info('snitch text ' + str(res.text))
         local_repo = get_repo()
         run_python()
         today = datetime.date.today()
         cm = "instagram and strava updates from " + str(today)
+        make_commits(local_repo, cm)
+        time.sleep(30)
+        run_tests()
+        send_logs(log_file)
+    else:
+        open(log_file, 'w')
+        local_repo = get_repo()
+        run_python()
+        today = datetime.date.today()
+        cm = "instagram and strava updates from " + str(today)
+        res = requests.get("https://nosnch.in/87c0ca5bfc")
+        logger.info('snitch status ' + str(res.status_code))
+        logger.info('snitch text ' + str(res.text))
         make_commits(local_repo, cm)
         push_repo(local_repo)
         time.sleep(30)

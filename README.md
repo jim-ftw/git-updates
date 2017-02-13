@@ -17,13 +17,14 @@ python worker.py [-h] [-f] [--debug] [--bg BG [BG ...]]
                  [--rmbg RMBG [RMBG ...]] [--rmig RMIG [RMIG ...]] [--test]
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -f, --force           force html recreation
-  --debug               debug logging level
-  --bg BG [BG ...]      add new background image based on image number
-  --rmbg RMBG [RMBG ...]
-                        remove background images based on image number
-  --rmig RMIG [RMIG ...]
-                        remove instagram photos based on image number
-  --test                run img tests
+    -h, --help            show this help message and exit
+    -f, --force           force html recreation
+    --verbose             verbose logging level
+    --bg BG [BG ...]      add new background image based on image number
+    --rmbg RMBG [RMBG ...]
+                          remove background images based on image number
+    --rmig RMIG [RMIG ...]
+                          remove instagram photos based on image number
+    --test                run img tests
+    --nopush              do not push repo
 ```
