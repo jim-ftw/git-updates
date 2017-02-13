@@ -213,10 +213,15 @@ def get_json(lsphotos_json, url, tag, lsphotos_folder):
     parse_json(lsphotos_json, top_posts, lsphotos_folder)
     tag_page = insta_json['entry_data']['TagPage'][0]['tag']['media']['nodes']
     parse_json(lsphotos_json, tag_page, lsphotos_folder)
-    while insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['has_next_page'] is True:
-        cursor = insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['end_cursor']
-        new_url = insta_url + tag + '/?max_id=' + cursor
-        return new_url
+    try:
+        while insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['has_next_page'] is True:
+            cursor = insta_json['entry_data']['TagPage'][0]['tag']['media']['page_info']['end_cursor']
+            print cursor
+            new_url = insta_url + tag + '/?max_id=' + cursor
+            return new_url
+    except TypeError:
+        logging.warn('cannot go to next page: ' + url)
+        pass
 
 
 def rename_files(lsphotos_json, media_file_folder):
