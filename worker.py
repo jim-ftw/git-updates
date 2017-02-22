@@ -50,7 +50,7 @@ bad_urls = []
 # python arguments parsing
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--force', help="force html recreation", action="store_true", default=False)
-parser.add_argument('--verbose', help="verbose logging level", action="store_true", default=False)
+parser.add_argument('-v', '--verbose', help="verbose logging level", action="store_true", default=False)
 parser.add_argument('--bg', type=int, help="add new background image based on image number", nargs='+')
 parser.add_argument('--rmbg', type=int, help="remove background images based on image number", nargs='+')
 parser.add_argument('--rmig', type=int, help="remove instagram photos based on image number", nargs='+')
@@ -75,7 +75,7 @@ if args.verbose:
     logging.getLogger("requests").setLevel(logging.DEBUG)
     logging.getLogger("urllib3").setLevel(logging.DEBUG)
 else:
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARN)
 
 # nuclear option: this will completely remove an entire directory
 def clear_directory(directory):
@@ -193,13 +193,14 @@ def send_logs(logs):
     from_email = 'logs@' + os.getenv('SPARKPOST_SANDBOX_DOMAIN')
     with open(logs, 'r') as f:
         log_text = f.read()
-    response = sparky.transmission.send(
-        recipients=[os.getenv('email_address')],
-        text=str(log_text),
-        from_email=from_email,
-        subject='Lovestar Logs for ' + str(today)
-    )
-    print response
+    if log_text != "":
+        response = sparky.transmission.send(
+            recipients=[os.getenv('email_address')],
+            text=str(log_text),
+            from_email=from_email,
+            subject='Lovestar Logs for ' + str(today)
+        )
+        print response
 
 
 # Runs the python from Strava, Instagram, and Create HTML

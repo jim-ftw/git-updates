@@ -219,7 +219,7 @@ def get_json(lsphotos_json, url, tag, lsphotos_folder):
             new_url = insta_url + tag + '/?max_id=' + cursor
             return new_url
     except TypeError:
-        logging.warn('cannot go to next page: ' + url)
+        logging.info('cannot go to next page: ' + url)
         pass
 
 
