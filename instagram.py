@@ -188,7 +188,7 @@ def get_photo_info(lsphotos_json):
             r = requests.get(url)
             text = r.text
             photo_json = json.loads(re.search(r"window._sharedData\s*=\s*(.*);", text).group(1))
-            media = photo_json['entry_data']['PostPage'][0]['media']
+            media = photo_json['entry_data']['PostPage'][0]['graphql']['shortcode_media']
             item['owner'] = {}
             item['owner']['id'] = media['owner']['id']
             item['owner']['username'] = media['owner']['username']
