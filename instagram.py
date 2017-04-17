@@ -29,9 +29,7 @@ insta_url = 'https://www.instagram.com/explore/tags/'
 
 tags = [
     'lovestarbicyclebags',
-    'lovestarraceclub',
-    'lovestarfactoryteam',
-    'lovestarracingclub'
+    'lovestarraceclub'
 ]
 
 tag_page = {}
