@@ -49,7 +49,7 @@ def get_json(club_id, strava_dir, strava_json):
         last_name = item['lastname']
         strava_pic = item['profile']
         if strava_pic == 'avatar/athlete/large.png':
-            strava_pic = 'https://www.strava.com/images/img-error.jpg'
+            strava_pic = 'http://lovestarrace.club/img/no_profile_pic.jpg'
         strava_pic_extension = os.path.splitext(urlparse.urlparse(strava_pic).path)[1]
         strava_pic_path = os.path.join(strava_dir, str(strava_id) + strava_pic_extension)
         with open(strava_pic_path, 'wb') as handle:
