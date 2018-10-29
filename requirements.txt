@@ -4,7 +4,7 @@ gitdb2==2.0.0
 GitPython==2.1.0
 html5lib==0.999999999
 Pillow==3.4.2
-requests==2.12.3
+requests>=2.20.0
 six==1.10.0
 smmap2==2.0.1
 sparkpost==1.3.2
